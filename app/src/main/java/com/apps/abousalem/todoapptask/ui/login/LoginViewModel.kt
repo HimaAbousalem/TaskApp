@@ -12,8 +12,11 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class LoginViewModel(application: Application): BaseViewModel(application){
-
-
+   /* @Inject
+    lateinit var repository: TaskRepository
+    init{
+        (application as TodoTaskApplication).getComponent().inject(this)
+    }*/
     fun addUser(user: User): Completable {
         return repository.saveUser(user)
             .subscribeOn(Schedulers.io())

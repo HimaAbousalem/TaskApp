@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="50dp">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="horizontal">
+        <RadioButton android:layout_width="0dp"
+                     android:layout_weight="0.1"
+                     android:layout_height="wrap_content"
+        android:id="@+id/done_radio_btn"/>
+        <LinearLayout android:layout_width="0dp"
+                      android:layout_weight="0.6"
+                      android:layout_height="match_parent"
+                      android:padding="4dp"
+        android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/task_name"
+            android:text="Eating Lunch!"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="30/1/2019"
+            android:id="@+id/task_date"/>
+        </LinearLayout>
+        <RadioGroup android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+        android:orientation="horizontal">
+            <RadioButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+                         android:id="@+id/low_priority" android:checked="true"/>
+            <RadioButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/mid_priority"/>
+            <RadioButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/high_priority"/>
+        </RadioGroup>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

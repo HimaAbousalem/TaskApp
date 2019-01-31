@@ -4,6 +4,7 @@ import com.apps.abousalem.todoapptask.TodoTaskApplication
 import com.apps.abousalem.todoapptask.dagger.module.AppModule
 import com.apps.abousalem.todoapptask.dagger.scope.AppScope
 import com.apps.abousalem.todoapptask.ui.base.BaseViewModel
+import com.apps.abousalem.todoapptask.ui.login.LoginViewModel
 import dagger.Component
 
 @AppScope

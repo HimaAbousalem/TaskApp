@@ -2,6 +2,8 @@ package com.apps.abousalem.todoapptask.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProviders
 import com.apps.abousalem.todoapptask.R
 import com.apps.abousalem.todoapptask.TodoTaskApplication
 import com.apps.abousalem.todoapptask.dagger.component.DaggerActivityComponent
@@ -15,6 +17,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class LoginActivity : BaseActivity() {
+
     @Inject
     lateinit var loginViewModel: LoginViewModel
 
@@ -41,7 +44,8 @@ class LoginActivity : BaseActivity() {
     private fun insertNewUser(userName: String) {
         loginViewModel.addUser(User(userName = userName))
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({Timber.d("inserted successfully")
+            .subscribe({
+                Toast.makeText(this, "user Inserted!",Toast.LENGTH_SHORT).show()
             gotoTaskActivity()},{ Timber.d("Unsuccessfully insertion, "+ it.message)})
     }
 

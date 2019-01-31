@@ -22,7 +22,7 @@ abstract class TaskDatabase: RoomDatabase() {
     abstract fun commentDao(): CommentDao
 
     companion object {
-        private lateinit var INSTANCE: TaskDatabase
+        private var INSTANCE: TaskDatabase? = null
         fun getInstance(context: Context): TaskDatabase {
             if(INSTANCE ==null){
                 synchronized(TaskDatabase::class){
@@ -33,7 +33,7 @@ abstract class TaskDatabase: RoomDatabase() {
                         .build()
                 }
             }
-            return INSTANCE
+            return INSTANCE!!
         }
     }
 }
