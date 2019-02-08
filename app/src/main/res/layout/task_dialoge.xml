@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@drawable/dialoge_frame"
+              android:layout_gravity="center"
+              android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+            android:text="Create Task"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content" android:textStyle="bold" android:textSize="24sp"
+            android:textColor="@color/design_default_color_on_secondary" android:layout_marginTop="4dp"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/edit_text_border"
+            android:inputType="textPersonName"
+            android:gravity="center"
+            android:ems="10"
+            android:id="@+id/task_text_dialoge" android:layout_margin="8dp" android:hint="Task Tittle"/>
+    <Button
+            android:text="create"
+            android:background="@drawable/button_border"
+            android:layout_width="match_parent"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_height="50dp" android:id="@+id/task_create_btn" android:layout_marginBottom="4dp"/>
+</LinearLayout>

@@ -5,6 +5,64 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.TaskDetailsActivity">
-
+        tools:context=".ui.taskdetails.TaskDetailsActivity">
+    <androidx.appcompat.widget.Toolbar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:theme="?attr/actionBarTheme"
+            android:minHeight="?attr/actionBarSize"
+            android:id="@+id/details_toolbar" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/task_details_recycler_view"
+            app:layout_constraintBottom_toTopOf="@+id/view4"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/details_toolbar"/>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="#e6e1e1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/view4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    <EditText
+            android:background="@drawable/edit_text_border"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:inputType="textPersonName"
+            android:hint="Comment"
+            android:paddingLeft="10dp"
+            android:ems="10"
+            android:id="@+id/comment_edit_text" android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="@+id/view4" android:layout_marginLeft="8dp"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="@+id/view4"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/send_comment_btn" android:layout_marginRight="8dp"/>
+    <Button
+            android:background="@drawable/send_comment"
+            android:layout_width="60dp"
+            android:layout_height="60dp" android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/send_comment_btn"
+            app:layout_constraintTop_toTopOf="@+id/view4" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/view4"/>
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/delete_task_btn_details" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/task_details_recycler_view"
+            android:background="@drawable/red_delete_icon"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

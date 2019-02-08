@@ -1,10 +1,7 @@
 package com.apps.abousalem.todoapptask.model.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.apps.abousalem.todoapptask.model.database.entities.Task
 import io.reactivex.Completable
 
@@ -19,4 +16,10 @@ interface TaskDao{
 
     @Delete
     fun deleteTask(task: Task):Completable
+
+    @Update
+    fun updateTask(task: Task):Completable
+
+    @Query("Select * From task_table Where id = :taskId")
+    fun getTaskById(taskId: Int):LiveData<Task>
 }
