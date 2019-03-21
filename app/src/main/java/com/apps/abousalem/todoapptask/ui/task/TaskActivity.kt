@@ -1,5 +1,8 @@
 package com.apps.abousalem.todoapptask.ui.task
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +30,7 @@ import kotlinx.android.synthetic.main.activity_task.*
 import javax.inject.Inject
 import android.view.MenuItem
 import com.apps.abousalem.todoapptask.R
+import com.apps.abousalem.todoapptask.service.AlarmReceiver
 
 
 class TaskActivity : BaseActivity(), TaskItemListener,RecyclerSwiping.RecyclerItemTouchHelperListener {
@@ -39,6 +43,7 @@ class TaskActivity : BaseActivity(), TaskItemListener,RecyclerSwiping.RecyclerIt
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var component: ActivityComponent
     var isFiltered = false
+    val REQUESTED_CODE = 1
     var tasks: MutableList<TaskRecyclerItem> = mutableListOf()
     var filteredList: MutableList<TaskRecyclerItem> = mutableListOf()
     var unFilteredList: MutableList<TaskRecyclerItem> = mutableListOf()
@@ -119,6 +124,14 @@ class TaskActivity : BaseActivity(), TaskItemListener,RecyclerSwiping.RecyclerIt
             .subscribe({ Log.d("updateTask", "updated successfully!")},{ Log.d("updateTask", "something went wrong!")})
     }
 
+    override fun onStop() {
+        super.onStop()
+        val intent = Intent(this, AlarmReceiver::class.java)
+        intent.putExtra("unDoneTasks", (unFilteredList.size - filteredList.size))
+        val pendingIntent = PendingIntent.getBroadcast(this, REQUESTED_CODE , intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.set(AlarmManager.RTC_WAKEUP, 1000, pendingIntent)
+    }
     private fun showDialog() {
         val fm = supportFragmentManager
         val taskDialog = DialogView()
