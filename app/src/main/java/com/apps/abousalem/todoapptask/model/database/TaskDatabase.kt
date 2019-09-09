@@ -14,7 +14,7 @@ import com.apps.abousalem.todoapptask.model.database.entities.User
 import com.apps.abousalem.todoapptask.utils.Converters
 import com.apps.abousalem.todoapptask.utils.databaseName
 
-@Database(entities = [User::class, Task::class, TaskComments::class], version = 1 )
+@Database(entities = [User::class, Task::class, TaskComments::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class TaskDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao

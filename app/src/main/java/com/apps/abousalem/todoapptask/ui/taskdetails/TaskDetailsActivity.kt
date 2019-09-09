@@ -1,61 +1,78 @@
 package com.apps.abousalem.todoapptask.ui.taskdetails
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apps.abousalem.todoapptask.R
-import com.apps.abousalem.todoapptask.TodoTaskApplication
-import com.apps.abousalem.todoapptask.dagger.component.DaggerActivityComponent
-import com.apps.abousalem.todoapptask.dagger.module.ActivityModule
+import com.apps.abousalem.todoapptask.extenstion.hideKeyboard
 import com.apps.abousalem.todoapptask.model.database.entities.Task
 import com.apps.abousalem.todoapptask.model.database.entities.TaskComments
+import com.apps.abousalem.todoapptask.ui.base.BaseActivity
+import com.apps.abousalem.todoapptask.ui.base.SharedViewModel
+import com.apps.abousalem.todoapptask.ui.base.ViewModelFactory
 import com.apps.abousalem.todoapptask.utils.TaskItemListener
 import com.apps.abousalem.todoapptask.utils.taskExtra
 import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_task.*
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_task_details.*
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class TaskDetailsActivity : AppCompatActivity(), TaskItemListener {
+class TaskDetailsActivity : BaseActivity(), TaskItemListener {
 
     @Inject
-    lateinit var taskDetailsViewModel: TaskDetailsViewModel
-    @Inject
-    lateinit var adapter: GroupAdapter<ViewHolder>
+    lateinit var viewModelFactory: ViewModelFactory
+    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var taskDetailsViewModel: TaskDetailsViewModel
+    private val disposable: CompositeDisposable? = CompositeDisposable()
+
+    private lateinit var adapter: GroupAdapter<ViewHolder>
     @Inject
     lateinit var linearLayoutManager: LinearLayoutManager
-    var listItem:  MutableList<Group> = mutableListOf()
-    var flagForComments =0
-    var flagTask = 0
-    var taskId: Int? = null
+    private var listItem:  MutableList<Group> = mutableListOf()
+    private var flagForComments =0
+    private var flagTask = 0
+    private var taskId: Int? = null
     var task: Task? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_details)
-        DaggerActivityComponent.builder()
-            .todoTaskAppComponent((application as TodoTaskApplication).getComponent())
-            .activityModule(ActivityModule(this))
-            .build().inject(this)
+        getActivityComponent().inject(this)
+        sharedViewModel = ViewModelProvider(this, viewModelFactory)[SharedViewModel::class.java]
+        taskDetailsViewModel = ViewModelProvider(this, viewModelFactory)[TaskDetailsViewModel::class.java]
         taskId= intent.getIntExtra(taskExtra,-1)
+    }
+
+    override fun onStart() {
+        super.onStart()
         setupRecycler()
         send_comment_btn.setOnClickListener {
             addComment()
+            hideKeyboard()
         }
         delete_task_btn_details.setOnClickListener {
-            taskDetailsViewModel.deleteTask(task!!)
+            disposable?.add(sharedViewModel.deleteTask(task!!)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Toast.makeText(this,"Task Deleted Successfully!", Toast.LENGTH_SHORT).show()
-                    finish()},{})
+                    finish()},{}))
         }
         listenToHeaderChange()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        disposable?.clear()
     }
     private fun setupToolbar(){
         setSupportActionBar(details_toolbar)
@@ -84,8 +101,10 @@ class TaskDetailsActivity : AppCompatActivity(), TaskItemListener {
     }
 
     override fun updateTask(task: Task) {
-        taskDetailsViewModel.updateTask(task)
-            .subscribe({ Log.d("updateTask", "updated successfully!")},{ Log.d("updateTask", "something went wrong!")})
+        disposable?.add(sharedViewModel.updateTask(task)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ Timber.d("updated successfully!")},{ Timber.d("something went wrong!")}))
     }
 
     private fun listenToCommentsChange() {
@@ -106,12 +125,15 @@ class TaskDetailsActivity : AppCompatActivity(), TaskItemListener {
     private fun addComment() {
         val commentText = comment_edit_text.text.toString().trim()
         if(commentText.isEmpty())return
-        taskDetailsViewModel.addComment(TaskComments(commentText = commentText, commentDate = Date(), taskId = taskId!!))
-            .subscribe({ Log.d("comment", "comment Added Successfully!")
-            comment_edit_text.text.clear()},{})
+        disposable?.add(taskDetailsViewModel.addComment(TaskComments(commentText = commentText, commentDate = Date(), taskId = taskId!!))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ Timber.d("comment Added Successfully!")
+            comment_edit_text.text.clear()},{}))
     }
 
     private fun setupRecycler() {
+        adapter = GroupAdapter()
         task_details_recycler_view.layoutManager = linearLayoutManager
         task_details_recycler_view.adapter = adapter
     }

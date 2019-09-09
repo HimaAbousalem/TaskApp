@@ -86,6 +86,4 @@ class TaskRepository @Inject constructor(taskDatabase: TaskDatabase, private val
     fun clearSharedPrefs() {
         return prefsEditor.clear().apply()
     }
-
-
 }

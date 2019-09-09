@@ -1,8 +1,6 @@
 package com.apps.abousalem.todoapptask.ui.base
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.apps.abousalem.todoapptask.TodoTaskApplication
+import androidx.lifecycle.ViewModel
 import com.apps.abousalem.todoapptask.model.TaskRepository
 import com.apps.abousalem.todoapptask.model.database.entities.Task
 import io.reactivex.Completable
@@ -10,12 +8,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-open class BaseViewModel (application: Application): AndroidViewModel(application){
-    @Inject
-    lateinit var repository: TaskRepository
-    init{
-        (application as TodoTaskApplication).getComponent().inject(this)
-    }
+open class SharedViewModel @Inject constructor(private val repository: TaskRepository): ViewModel(){
+
     fun getUserId():Int{
         return repository.getUserIdFromPrefs()
     }
@@ -25,13 +19,9 @@ open class BaseViewModel (application: Application): AndroidViewModel(applicatio
     }
     fun updateTask(task: Task): Completable {
         return repository.updateTask(task)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun deleteTask(task: Task): Completable {
         return repository.deleteTask(task)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
     }
 }

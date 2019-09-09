@@ -1,17 +1,17 @@
 package com.apps.abousalem.todoapptask.ui.task
 
-import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import com.apps.abousalem.todoapptask.model.TaskRepository
 import com.apps.abousalem.todoapptask.model.database.entities.Task
-import com.apps.abousalem.todoapptask.ui.base.BaseViewModel
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class TaskViewModel(application: Application): BaseViewModel(application) {
+class TaskViewModel @Inject constructor(private val repository: TaskRepository): ViewModel() {
 
     fun addNewTask(task: Task): Completable {
         return repository.insertTask(task)
-            .subscribeOn(Schedulers.io())
     }
 
     fun getAllTasks(taskId: Int):LiveData<List<Task>>{
